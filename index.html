@@ -15,6 +15,7 @@
       font-family: 'Roboto', sans-serif;
       margin: 0;
       padding: 0;
+      font-size: 18px; /* Increased base font size */
   }
 
   h1, h2, label {
@@ -23,8 +24,9 @@
 
   .container {
       padding: 20px;
-      max-width: 600px;
-      margin: auto;
+      max-width: 100%;
+      margin: 0;
+      box-sizing: border-box;
   }
 
   .item {
@@ -42,8 +44,9 @@
       background-color: #2C2C2C;
       border: none;
       color: #FFFFFF;
-      padding: 8px;
+      padding: 10px; /* Increased padding for larger touch targets */
       border-radius: 4px;
+      font-size: 18px; /* Increased font size */
   }
 
   .item input[type="text"]::placeholder {
@@ -60,9 +63,10 @@
       background-color: #BB86FC;
       border: none;
       color: #FFFFFF;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 16px;
   }
 
   .item button:hover {
@@ -73,11 +77,12 @@
       background-color: #03DAC6;
       border: none;
       color: #000000;
-      padding: 10px 20px;
+      padding: 14px 24px;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 18px;
       margin-top: 20px;
+      width: 100%;
   }
 
   #addItemButton:hover {
@@ -88,14 +93,15 @@
       background-color: #2C2C2C;
       border: none;
       color: #FFFFFF;
-      padding: 8px;
+      padding: 10px;
       border-radius: 4px;
-      width: 60px;
+      width: 80px;
       margin-left: 10px;
+      font-size: 18px;
   }
 
   label {
-      font-size: 18px;
+      font-size: 20px;
   }
 
   .header {
@@ -107,12 +113,18 @@
 
   .header h1 {
       margin: 0;
+      font-size: 32px;
   }
 
   .header .max-select-container {
       display: flex;
       align-items: center;
       margin-top: 10px;
+  }
+
+  h2 {
+      font-size: 24px;
+      margin-top: 30px;
   }
 
   /* Scrollbar styles */
@@ -135,19 +147,36 @@
 
   /* Responsive Design */
   @media (max-width: 600px) {
+      body {
+          font-size: 20px; /* Increase font size on smaller screens */
+      }
+
       .item input[type="text"] {
           margin: 10px 0;
       }
+
       .item {
           flex-direction: column;
           align-items: flex-start;
       }
+
+      .item button {
+          width: 100%;
+          margin-top: 10px;
+      }
+
       .header {
           flex-direction: column;
           align-items: flex-start;
       }
+
       .header .max-select-container {
           margin-left: 0;
+          margin-top: 10px;
+      }
+
+      #addItemButton {
+          font-size: 20px;
       }
   }
   </style>
