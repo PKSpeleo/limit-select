@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Limited Selection of Items</title>
+  <title>Limited Selection of Items with Unicode Support</title>
   <style>
   .item {
       margin-bottom: 5px;
@@ -35,6 +35,25 @@ let itemCount = 0;
 let selectedItems = [];
 let itemsData = [];
 
+// Functions to handle base64 encoding/decoding with Unicode support
+function base64Encode(str) {
+  const encoder = new TextEncoder();
+  const bytes = encoder.encode(str);
+  let binary = '';
+  bytes.forEach((b) => binary += String.fromCharCode(b));
+  return btoa(binary);
+}
+
+function base64Decode(str) {
+  const binary = atob(str);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  const decoder = new TextDecoder();
+  return decoder.decode(bytes);
+}
+
 function updateURL() {
   const state = {
     maxSelect: maxSelectInput.value,
@@ -44,7 +63,7 @@ function updateURL() {
     }))
   };
   const stateString = JSON.stringify(state);
-  const encodedState = btoa(stateString);
+  const encodedState = base64Encode(stateString);
   const newURL = window.location.origin + window.location.pathname + '?state=' + encodeURIComponent(encodedState);
   window.history.replaceState(null, '', newURL);
 }
@@ -110,10 +129,6 @@ function handleCheckboxChange(event) {
   updateURL();
 }
 
-addItemButton.addEventListener('click', () => {
-  createItem();
-});
-
 maxSelectInput.addEventListener('change', () => {
   // Deselect items if new max is less than the number of selected items
   const maxSelect = parseInt(maxSelectInput.value);
@@ -125,13 +140,17 @@ maxSelectInput.addEventListener('change', () => {
   updateURL();
 });
 
+addItemButton.addEventListener('click', () => {
+  createItem();
+});
+
 // Function to load state from URL
 function loadStateFromURL() {
   const params = new URLSearchParams(window.location.search);
   const encodedState = params.get('state');
   if (encodedState) {
     try {
-      const stateString = atob(encodedState);
+      const stateString = base64Decode(decodeURIComponent(encodedState));
       const state = JSON.parse(stateString);
       maxSelectInput.value = state.maxSelect;
       // Clear existing items
