@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Limited Selection of Items</title>
+  <style>
+  .item {
+      margin-bottom: 5px;
+  }
+  .item input[type="text"] {
+      margin-right: 10px;
+  }
+  </style>
+</head>
+<body>
+
+<h1>Limited Selection of Items</h1>
+
+<label for="maxSelect">Maximum number of selectable items:</label>
+<input type="number" id="maxSelect" value="2" min="1" style="width: 50px;">
+
+<h2>Items</h2>
+<div id="itemsList">
+  <!-- Items will be added here -->
+</div>
+
+<button id="addItemButton">Add Item</button>
+
+<script>
+const maxSelectInput = document.getElementById('maxSelect');
+const itemsList = document.getElementById('itemsList');
+const addItemButton = document.getElementById('addItemButton');
+let itemCount = 0;
+let selectedItems = [];
+
+function createItem(name = '') {
+  itemCount++;
+  const itemDiv = document.createElement('div');
+  itemDiv.className = 'item';
+
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.id = 'itemCheckbox' + itemCount;
+  checkbox.addEventListener('change', handleCheckboxChange);
+
+  const textInput = document.createElement('input');
+  textInput.type = 'text';
+  textInput.value = name;
+  textInput.placeholder = 'Item Name';
+
+  const removeButton = document.createElement('button');
+  removeButton.textContent = 'Remove';
+  removeButton.addEventListener('click', () => {
+    if (checkbox.checked) {
+      selectedItems = selectedItems.filter(id => id !== checkbox.id);
+    }
+    itemsList.removeChild(itemDiv);
+  });
+
+  itemDiv.appendChild(checkbox);
+  itemDiv.appendChild(textInput);
+  itemDiv.appendChild(removeButton);
+  itemsList.appendChild(itemDiv);
+}
+
+function handleCheckboxChange(event) {
+  const maxSelect = parseInt(maxSelectInput.value);
+  const checkbox = event.target;
+  if (checkbox.checked) {
+    selectedItems.push(checkbox.id);
+    if (selectedItems.length > maxSelect) {
+      const deselectId = selectedItems.shift();
+      const deselectCheckbox = document.getElementById(deselectId);
+      deselectCheckbox.checked = false;
+    }
+  } else {
+    selectedItems = selectedItems.filter(id => id !== checkbox.id);
+  }
+}
+
+addItemButton.addEventListener('click', () => {
+  createItem();
+});
+
+// Initialize with a few items
+createItem('Item 1');
+createItem('Item 2');
+createItem('Item 3');
+
+maxSelectInput.addEventListener('change', () => {
+  // Deselect items if new max is less than the number of selected items
+  const maxSelect = parseInt(maxSelectInput.value);
+  while (selectedItems.length > maxSelect) {
+    const deselectId = selectedItems.shift();
+    const deselectCheckbox = document.getElementById(deselectId);
+    deselectCheckbox.checked = false;
+  }
+});
+</script>
+
+</body>
+
+</html>
