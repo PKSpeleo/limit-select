@@ -2,30 +2,174 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Limited Selection of Items with Unicode Support</title>
+  <title>LimitSelect - Dark Material Design</title>
+  <!-- Include Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
+  /* Dark Material Design Styles */
+  body {
+      background-color: #121212;
+      color: #FFFFFF;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+  }
+
+  h1, h2, label {
+      color: #FFFFFF;
+  }
+
+  .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+  }
+
   .item {
-      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      background-color: #1E1E1E;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
   }
 
   .item input[type="text"] {
+      flex-grow: 1;
+      margin: 0 10px;
+      background-color: #2C2C2C;
+      border: none;
+      color: #FFFFFF;
+      padding: 8px;
+      border-radius: 4px;
+  }
+
+  .item input[type="text"]::placeholder {
+      color: #BBBBBB;
+  }
+
+  .item input[type="checkbox"] {
+      transform: scale(1.5);
       margin-right: 10px;
+      accent-color: #BB86FC;
+  }
+
+  .item button {
+      background-color: #BB86FC;
+      border: none;
+      color: #FFFFFF;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+
+  .item button:hover {
+      background-color: #9E6FF2;
+  }
+
+  #addItemButton {
+      background-color: #03DAC6;
+      border: none;
+      color: #000000;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+  }
+
+  #addItemButton:hover {
+      background-color: #01BDA5;
+  }
+
+  #maxSelect {
+      background-color: #2C2C2C;
+      border: none;
+      color: #FFFFFF;
+      padding: 8px;
+      border-radius: 4px;
+      width: 60px;
+      margin-left: 10px;
+  }
+
+  label {
+      font-size: 18px;
+  }
+
+  .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+  }
+
+  .header h1 {
+      margin: 0;
+  }
+
+  .header .max-select-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+  }
+
+  /* Scrollbar styles */
+  ::-webkit-scrollbar {
+      width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+      background: #1E1E1E;
+  }
+
+  ::-webkit-scrollbar-thumb {
+      background: #3C3C3C;
+      border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 600px) {
+      .item input[type="text"] {
+          margin: 10px 0;
+      }
+      .item {
+          flex-direction: column;
+          align-items: flex-start;
+      }
+      .header {
+          flex-direction: column;
+          align-items: flex-start;
+      }
+      .header .max-select-container {
+          margin-left: 0;
+      }
   }
   </style>
 </head>
 <body>
 
-<h1>Limited Selection of Items</h1>
+<div class="container">
+  <div class="header">
+    <h1>LimitSelect</h1>
+    <div class="max-select-container">
+      <label for="maxSelect">Max selectable items:</label>
+      <input type="number" id="maxSelect" value="2" min="1">
+    </div>
+  </div>
 
-<label for="maxSelect">Maximum number of selectable items:</label>
-<input id="maxSelect" min="1" style="width: 50px;" type="number" value="2">
+  <h2>Items</h2>
+  <div id="itemsList">
+    <!-- Items will be added here -->
+  </div>
 
-<h2>Items</h2>
-<div id="itemsList">
-  <!-- Items will be added here -->
+  <button id="addItemButton">Add Item</button>
 </div>
-
-<button id="addItemButton">Add Item</button>
 
 <script>
 const maxSelectInput = document.getElementById('maxSelect');
