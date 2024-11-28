@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>LimitSelect - Pastel Design</title>
+  <title>LimitSelect with Topic</title>
   <!-- Include Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,15 +135,23 @@
       background-color: #B495B2;
   }
 
-  #maxSelect {
+  #maxSelect, #topicInput {
       background-color: #FAFAFA;
       border: 1px solid #CCCCCC;
       color: #333333;
       padding: 10px;
       border-radius: 4px;
+      font-size: 18px;
+  }
+
+  #maxSelect {
       width: 80px;
       margin-left: 10px;
-      font-size: 18px;
+  }
+
+  #topicInput {
+      width: 100%;
+      box-sizing: border-box;
   }
 
   label {
@@ -151,26 +159,30 @@
   }
 
   .header {
+      padding-bottom: 20px;
+  }
+
+  .header-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
   }
 
-  .header h1 {
-      margin: 0;
-      font-size: 32px;
-  }
-
-  .header .max-select-container {
-      display: flex;
-      align-items: center;
+  .header-row label {
       margin-top: 10px;
   }
 
+  h1 {
+      margin: 0;
+      font-size: 32px;
+      text-align: center;
+  }
+
   h2 {
-      font-size: 24px;
-      margin-top: 30px;
+      margin-top: 20px;
+      font-size: 28px;
+      text-align: center;
   }
 
   /* Scrollbar styles */
@@ -232,9 +244,12 @@
           padding: 28px 48px;
       }
 
-      #maxSelect {
+      #maxSelect, #topicInput {
           font-size: 35px;
           padding: 20px;
+      }
+
+      #maxSelect {
           width: 120px;
       }
 
@@ -247,16 +262,10 @@
       }
 
       h2 {
-          font-size: 47px;
+          font-size: 54px;
       }
 
-      .header {
-          flex-direction: column;
-          align-items: flex-start;
-      }
-
-      .header .max-select-container {
-          margin-left: 0;
+      .header-row label {
           margin-top: 10px;
       }
   }
@@ -265,9 +274,11 @@
 <body>
 
 <div class="container">
+  <h1>LimitSelect</h1>
+  <h2 contenteditable="true" id="topicInput">Your Topic Here</h2>
+
   <div class="header">
-    <h1>LimitSelect</h1>
-    <div class="max-select-container">
+    <div class="header-row">
       <label for="maxSelect">Maximum number of selectable items:</label>
       <input type="number" id="maxSelect" value="2" min="1">
     </div>
@@ -285,6 +296,7 @@
 const maxSelectInput = document.getElementById('maxSelect');
 const itemsList = document.getElementById('itemsList');
 const addItemButton = document.getElementById('addItemButton');
+const topicInput = document.getElementById('topicInput');
 let itemCount = 0;
 let selectedItems = [];
 let itemsData = [];
@@ -310,6 +322,7 @@ function base64Decode(str) {
 
 function updateURL() {
   const state = {
+    topic: topicInput.textContent.trim(),
     maxSelect: maxSelectInput.value,
     items: itemsData.map(item => ({
       name: item.nameInput.value,
@@ -408,6 +421,9 @@ addItemButton.addEventListener('click', () => {
   createItem();
 });
 
+// Update URL when topic is edited
+topicInput.addEventListener('input', updateURL);
+
 // Function to load state from URL
 function loadStateFromURL() {
   const params = new URLSearchParams(window.location.search);
@@ -416,6 +432,12 @@ function loadStateFromURL() {
     try {
       const stateString = base64Decode(decodeURIComponent(encodedState));
       const state = JSON.parse(stateString);
+      // Ensure backward compatibility
+      if (state.topic !== undefined) {
+        topicInput.textContent = state.topic || 'Your Topic Here';
+      } else {
+        topicInput.textContent = 'Your Topic Here';
+      }
       maxSelectInput.value = state.maxSelect;
       // Clear existing items
       itemsList.innerHTML = '';
@@ -436,7 +458,8 @@ function loadStateFromURL() {
       console.error('Failed to load state from URL:', e);
     }
   } else {
-    // Initialize with a few items if no state is present
+    // Initialize with a default topic and items if no state is present
+    topicInput.textContent = 'Your Topic Here';
     createItem('Item 1');
     createItem('Item 2');
     createItem('Item 3');
