@@ -185,6 +185,23 @@
       text-align: center;
   }
 
+  /* Footer styles */
+  .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 20px;
+  }
+
+  .footer a {
+      color: #333333;
+      text-decoration: none;
+      border-bottom: 1px dotted #333333;
+  }
+
+  .footer a:hover {
+      border-bottom: 1px solid #333333;
+  }
+
   /* Scrollbar styles */
   ::-webkit-scrollbar {
       width: 8px;
@@ -268,6 +285,11 @@
       .header-row label {
           margin-top: 10px;
       }
+
+      .footer {
+          font-size: 28px;
+          margin-top: 60px;
+      }
   }
   </style>
 </head>
@@ -290,6 +312,11 @@
   </div>
 
   <button id="addItemButton">Add Item</button>
+
+  <!-- Footer with GitHub link -->
+  <div class="footer">
+    <p>View LimitSelect on <a href="https://github.com/PKSpeleo/limit-select" target="_blank">GitHub</a></p>
+  </div>
 </div>
 
 <script>
